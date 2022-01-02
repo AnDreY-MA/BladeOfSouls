@@ -38,6 +38,17 @@
                 },
                 {
                     "name": "",
+                    "id": "886e4a78-18e9-46ac-821e-779290380247",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Attack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "d9670cfc-60bb-48dc-8bfd-9823cb901951",
                     "path": "<Gamepad>/leftStick",
                     "interactions": "",

@@ -1,34 +1,26 @@
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : Player
 {
     [SerializeField] private float _speedMove;
 
-    private Animator _animPlayer;
-
-    private PlayerInput _playerInput;
-
     private Vector3 _direction;
 
-    private void Awake()
-    {
-        _animPlayer = GetComponent<Animator>();
-        _playerInput = new PlayerInput();
-        _playerInput.Enable();
-    }
+    private void Update() => CheckInput();
+    private void LateUpdate() => Move();
 
-    private void Update()
+    private void CheckInput()
     {
         _direction = Vector3.zero;
         _direction = _playerInput.Player.Move.ReadValue<Vector2>();
-        Move();
     }
 
     private void Move()
     {
+        _rbPlayer.MovePosition(transform.position + _direction * _speedMove * Time.deltaTime);
+
         if (_direction != Vector3.zero)
         {
-            transform.Translate(_direction * _speedMove * Time.deltaTime);
             _animPlayer.SetFloat("moveX", _direction.x);
             _animPlayer.SetFloat("moveY", _direction.y);
             _animPlayer.SetBool("isMoving", true);

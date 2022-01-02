@@ -38,3 +38,10 @@ sysinfo.txt
 *.meta
 *.anim
 *.meta
+*.prefab
+*.mat
+*.asset
+*.log
+*.log
+*.log
+*.asset
