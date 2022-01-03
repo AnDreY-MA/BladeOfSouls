@@ -2,10 +2,14 @@ using UnityEngine;
 using System.Collections;
 public class PlayerAttack : Player
 {
-    [SerializeField] private float _damageAttack;
+    [SerializeField] private int _damage;
+    [SerializeField] private int _enegry;
 
-    private void Start()
+    public int DamagePoint => _damage;
+
+    protected override void Awake()
     {
+        base.Awake();
         _playerInput.Player.Attack.performed += ctx => Attack();
     }
 
