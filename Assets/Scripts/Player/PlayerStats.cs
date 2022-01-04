@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerStats : MonoBehaviour
 {
-    [SerializeField] private PlayerAttack _player;
+    [SerializeField] private PlayerBattle _player;
     [SerializeField] private SpriteRenderer[] _spritesEnergy;
     [SerializeField] private Sprite _full;
     [SerializeField] private Sprite _empty;
