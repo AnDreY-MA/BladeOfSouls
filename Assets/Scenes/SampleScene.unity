@@ -566,7 +566,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7768421, y: 1}
+    m_SensorSize: {x: 1.7775061, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -2680,7 +2680,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55596a60da794004686119ae60ee292a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speedMove: 5
+  _speed: 5
+  _layer: Layer 2
 --- !u!212 &1427739379
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2785,6 +2786,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _health: 5
   _damage: 4
+  _cooldownTime: 1.3
+  maxComboDelay: 0.4
   _stamina: 3
   _reloadStamina: 1.5
 --- !u!61 &1427739383
