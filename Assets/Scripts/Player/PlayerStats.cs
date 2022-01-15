@@ -16,5 +16,10 @@ public class PlayerStats : MonoBehaviour
     private void OnDisable() => _player.OnEnergyEmptyChanged -= EmptyEnergy;
 
     private void EmptyEnergy(int energy) => _spritesEnergy[energy].sprite = _empty;
-    private void FillEnergy(int energy) => _spritesEnergy[energy-1].sprite = _full;
+    private void FillEnergy(int energy)
+    {
+        if(energy != 0)
+            _spritesEnergy[energy - 1].sprite = _full;
+    }
+
 }

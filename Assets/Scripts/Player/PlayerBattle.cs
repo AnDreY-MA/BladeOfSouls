@@ -5,8 +5,6 @@ public class PlayerBattle : Player
 {
     [SerializeField] private int _health;
     [SerializeField] private int _damage;
-    [SerializeField] private float _cooldownTime;
-    [SerializeField] private float maxComboDelay = 1f;
     [SerializeField] private int _stamina;
     [SerializeField] private float _reloadStamina;
     public int DamagePoint => _damage;
@@ -15,88 +13,29 @@ public class PlayerBattle : Player
     public Action<int> OnEnergyEmptyChanged;
     public Action<int> OnEnergyFillChanged;
     public static Action OnAttack;
-    public static int NoOfClicks = 0;
-
-    private float _nextAttackTime = 0f;
-    private float _lastCkickedTime = 0f;
-    
-    private float _time;
 
     private int _currentStamina;
 
-    private AnimatorStateInfo _animatorState;
+    private bool _isAttack = false;
     
     protected override void Awake()
     {
         base.Awake();
 
-        _playerInput.Player.Attack.performed += ctx => ApplyAttack();
+        _playerInput.Player.Attack.performed += ctx => Attack();
         _currentStamina = _stamina;
-        _animatorState = _animPlayer.GetCurrentAnimatorStateInfo(0);
     }
 
-    private void Update()
-    {
-        _time = Time.time;
-        CheckTimeToAttack();
-    }
-
-    private void CheckTimeToAttack()
-    {
-        if (_animPlayer.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f && _animPlayer.GetCurrentAnimatorStateInfo(0).IsName("Attack-1"))
-            _animPlayer.SetBool("Attack-1", false);
-        if (_animPlayer.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f && _animPlayer.GetCurrentAnimatorStateInfo(0).IsName("Attack-2"))
-        {
-            _animPlayer.SetBool("Attack-2", false);
-            NoOfClicks = 0;
-        }
-        if (Time.time - _lastCkickedTime > maxComboDelay)
-        {
-            NoOfClicks = 0;
-            _lastCkickedTime = 0;
-        }
-    }
-
-    private void ApplyAttack()
-    {
-        print("Click attack");
-        if (Time.time > _nextAttackTime)
-            ComboAttack();
-    }
-
-    private void ComboAttack()
-    {
-        _lastCkickedTime = Time.time;
-        NoOfClicks++;
-
-        if (NoOfClicks == 1)
-            _animPlayer.SetBool("Attack-1", true);
-
-        NoOfClicks = Mathf.Clamp(NoOfClicks, 0, 3);
-
-         if(NoOfClicks >= 2 && _animPlayer.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f && _animPlayer.GetCurrentAnimatorStateInfo(0).IsName("Attack-1"))
-        {
-            _animPlayer.SetBool("Attack-1", false);
-            _animPlayer.SetBool("Attack-2", true);
-        }
-    }
+    private void FixedUpdate() => _animator.SetFloat("StateTime", Mathf.Repeat(_animator.GetCurrentAnimatorStateInfo(0).normalizedTime, 1f));
 
     private void Attack()
     {
         if (_currentStamina > 0)
         {
-            StartCoroutine(AttackCorouritine());
+            _animator.SetTrigger("MeleeAttack");
+            ChangeStamina();
             OnAttack?.Invoke();
-        }       
-    }
-
-    private IEnumerator AttackCorouritine()
-    {
-        ChangeStamina();
-
-        _animPlayer.SetBool("isAttacking", true);      
-        yield return new WaitForSeconds(.3f);
-        _animPlayer.SetBool("isAttacking", false);       
+        }
     }
     
     private IEnumerator FillingStamina()
@@ -111,7 +50,8 @@ public class PlayerBattle : Player
 
     private void ChangeStamina()
     {
-        _currentStamina--;
+        if(_currentStamina > 0)
+            _currentStamina--;
         OnEnergyEmptyChanged?.Invoke(_currentStamina);
         StartCoroutine(FillingStamina());
     }

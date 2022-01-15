@@ -38,23 +38,24 @@ public class PlayerMovement : Player
 
     private void Move()
     {
-        _rbPlayer.MovePosition(transform.position + _direction * _currentSpeed * Time.deltaTime);
+        //_rigidbody.MovePosition(transform.position + _direction * _currentSpeed * Time.deltaTime);
 
         if (_direction != Vector3.zero)
         {
-            _animPlayer.SetFloat("moveX", _direction.x);
-            _animPlayer.SetFloat("moveY", _direction.y);
-            _animPlayer.SetBool("isMoving", true);
+            _rigidbody.MovePosition(transform.position + _direction * _currentSpeed * Time.deltaTime);
+            _animator.SetFloat("moveX", _direction.x);
+            _animator.SetFloat("moveY", _direction.y);
+            _animator.SetBool("isMoving", true);
         }
         else
-            _animPlayer.SetBool("isMoving", false);
+            _animator.SetBool("isMoving", false);
     }
 
     private void ChangeMove() => StartCoroutine(ChangeSpeed());
 
     private IEnumerator ChangeSpeed()
     {
-        _currentSpeed = 0;
+        _currentSpeed = 0;   
         yield return new WaitForSeconds(0.4f);
         _currentSpeed = _speed;
     }
