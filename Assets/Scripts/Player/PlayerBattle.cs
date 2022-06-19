@@ -9,14 +9,14 @@ public class PlayerBattle : Player
     [SerializeField] private float _reloadStamina;
     public int DamagePoint => _damage;
 
-    public Action<int> OnHealthChanged;
+    
     public Action<int> OnEnergyEmptyChanged;
     public Action<int> OnEnergyFillChanged;
+
     public static Action OnAttack;
+    public static Action<int> OnHealthChanged;
 
     private int _currentStamina;
-
-    private bool _isAttack = false;
     
     protected override void Awake()
     {
@@ -27,6 +27,15 @@ public class PlayerBattle : Player
     }
 
     private void FixedUpdate() => _animator.SetFloat("StateTime", Mathf.Repeat(_animator.GetCurrentAnimatorStateInfo(0).normalizedTime, 1f));
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.TryGetComponent<DangerZone>(out DangerZone dangerZone))
+        {
+            _health -= 1;
+            OnHealthChanged?.Invoke(_health);
+        }
+    }
 
     private void Attack()
     {
